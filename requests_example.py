@@ -59,20 +59,24 @@ class SimpleParser():
                 print('File all ready exists')
 
 
+class ImageRedactor():
+    def __init__(self, queue):
+        self.queue = queue
+
+    def change_color(self):
+        counter = 0
+        while True:
+            try:
+                counter += 1
+                image_path, image = self.queue.get(timeout=1)
+                extension = os.path.splitext(image)[1]
+            except Empty:
+                break
+            image = Image.open(f'{image_path}/{image}')
+            image = image.convert('L')
+            image.save(f'{image_path}/image_{counter}{extension}')
 
 
-def change_color(queue):
-    counter = 0
-    while True:
-        try:
-            counter += 1
-            image_path, image = queue.get(timeout=1)
-            extension = os.path.splitext(image)[1]
-        except Empty:
-            break
-        image = Image.open(f'{image_path}/{image}')
-        image = image.convert('L')
-        image.save(f'{image_path}/image_{counter}{extension}')
 
 if __name__ == '__main__':
     content = SimpleParser(GENIUS_API_URL, ACCESS_TOKEN)
@@ -83,5 +87,7 @@ if __name__ == '__main__':
     for image in os.listdir(images_path):
         queue.put((images_path, image))
 
-    change_color(queue)
+    re_image = ImageRedactor(queue)
+    re_image.change_color()
+
 
