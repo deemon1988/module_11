@@ -4,9 +4,9 @@ from os import mkdir
 
 import requests
 from PIL import Image
-from sqlalchemy.util.queue import Queue, Empty
+from queue import Queue, Empty
 
-
+# не конвертировать повторно, запускать в потоках, создать venv и requirements.txt
 GENIUS_URL = 'https://api.genius.com/'
 GENIUS_API_URL = 'https://api.genius.com/search'
 ACCESS_TOKEN = 'CXyFeSBw2lAdG41xkuU3LS6a_nwyxwwCz2dCkUohw-rw0C49x2HqP__6_4is5RPx'
